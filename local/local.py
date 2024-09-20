@@ -1,16 +1,13 @@
 import socket
 from ctypes import *
 
-# init vJoy
 vjoy = CDLL('C:\\Program Files\\vJoy\\x64\\vJoyInterface.dll')
 vjoy.AcquireVJD(1)
 vjoy.ResetVJD(1)
 
-# connect to remote
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect(("192.168.1.1", 2345))
 
-# some helper functions
 def word(b0, b1):
     return (b0 << 8) | b1
 
@@ -18,9 +15,8 @@ def conv(w):
     return (w / 8 - 128) & 0xff
 
 def scale(x):
-                return int((x - 364) / 1320 * 32768)
+    return int((x - 364) / 1320 * 32768)
 
-# read data from the remote and set the axis in vJoy
 while True:
     data = bytearray(s.recv(1024))
     if len(data) == 26:
